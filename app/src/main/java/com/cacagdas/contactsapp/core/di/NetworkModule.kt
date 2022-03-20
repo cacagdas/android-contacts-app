@@ -1,5 +1,7 @@
-package com.cacagdas.contactsapp.di
+package com.cacagdas.contactsapp.core.di
 
+import com.cacagdas.contactsapp.data.source.ContactRemoteDataSource
+import com.cacagdas.contactsapp.data.source.ContactService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -18,7 +20,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val DEFAULT_TIMEOUT = 30L
-    private const val API_URL = ""
+    private const val API_URL = "https://6235d62c163bf7c4745f03f1.mockapi.io/interview/v1"
 
     @Singleton
     @Provides
@@ -55,4 +57,16 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
+
+    @Singleton
+    @Provides
+    fun provideApiService(retrofit: Retrofit): ContactService {
+        return retrofit.create(ContactService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRemoteDataSource(service: ContactService): ContactRemoteDataSource {
+        return ContactRemoteDataSource(service)
+    }
 }
