@@ -21,8 +21,9 @@ class ContactViewHolder(
     fun bind(item: Contact) {
         contact = item
         binding.apply {
-            contactName.text = item.name
-            contactSurname.text = item.surname
+            fullName.text = "${item.name} ${item.surname}"
+            company.text = item.companyName
+            number.text = item.number.toString()
         }
     }
 
