@@ -11,7 +11,7 @@ class ContactsPagingSource(
     override fun getRefreshKey(state: PagingState<Long, Contact>): Long? = null
 
     override suspend fun load(params: LoadParams<Long>) = runCatching {
-        val page = params.key ?: -1
+        val page = params.key ?: 0
         getResponse(page + 1)?.let {
             LoadResult.Page(
                 data = it,

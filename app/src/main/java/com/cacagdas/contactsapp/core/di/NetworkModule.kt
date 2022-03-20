@@ -22,7 +22,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val DEFAULT_TIMEOUT = 30L
-    private const val API_URL = "https://6235d62c163bf7c4745f03f1.mockapi.io/interview/v1"
+    private const val API_URL = "https://6235d62c163bf7c4745f03f1.mockapi.io/interview/v1/"
 
     @Singleton
     @Provides
