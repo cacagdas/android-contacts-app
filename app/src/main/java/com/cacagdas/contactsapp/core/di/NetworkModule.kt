@@ -1,5 +1,7 @@
 package com.cacagdas.contactsapp.core.di
 
+import com.cacagdas.contactsapp.data.repo.ContactRepository
+import com.cacagdas.contactsapp.data.repo.ContactRepositoryImpl
 import com.cacagdas.contactsapp.data.source.ContactRemoteDataSource
 import com.cacagdas.contactsapp.data.source.ContactService
 import com.squareup.moshi.Moshi
@@ -68,5 +70,11 @@ object NetworkModule {
     @Provides
     fun provideRemoteDataSource(service: ContactService): ContactRemoteDataSource {
         return ContactRemoteDataSource(service)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepository(remoteDataSource: ContactRemoteDataSource): ContactRepository {
+        return ContactRepositoryImpl(remoteDataSource)
     }
 }

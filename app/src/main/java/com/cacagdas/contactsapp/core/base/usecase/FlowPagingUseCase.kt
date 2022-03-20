@@ -1,4 +1,4 @@
-package com.cacagdas.contactsapp.core.usecase
+package com.cacagdas.contactsapp.core.base.usecase
 
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow

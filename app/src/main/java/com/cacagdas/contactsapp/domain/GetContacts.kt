@@ -1,6 +1,6 @@
 package com.cacagdas.contactsapp.domain
 
-import com.cacagdas.contactsapp.core.usecase.FlowPagingUseCase
+import com.cacagdas.contactsapp.core.base.usecase.FlowPagingUseCase
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.data.repo.ContactRepository
 import javax.inject.Inject

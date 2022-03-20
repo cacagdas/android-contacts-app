@@ -1,4 +1,4 @@
-package com.cacagdas.contactsapp.core.usecase
+package com.cacagdas.contactsapp.core.base.usecase
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
