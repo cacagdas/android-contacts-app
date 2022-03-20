@@ -1,8 +1,7 @@
 package com.cacagdas.contactsapp.data.source
 
 import com.cacagdas.contactsapp.data.model.Contact
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ContactService {
 
@@ -10,9 +9,25 @@ interface ContactService {
         private const val PATH_CONTACT = "contacts"
     }
 
-    @GET("$PATH_CONTACT/{page}/{limit}")
+    @GET(PATH_CONTACT)
     suspend fun getContacts(
-        @Path("page") page: Long?,
-        @Path("limit") limit: Int? = 20,
+        @Query("page") page: Long?,
+        @Query("limit") limit: Int? = 20,
     ): List<Contact>?
+
+    @GET("$PATH_CONTACT/{id}")
+    suspend fun getContactDetail(
+        @Path("id") id: String,
+    ): Contact
+
+    @DELETE("$PATH_CONTACT/{id}")
+    suspend fun deleteContact(
+        @Path("id") id: String,
+    ): Contact
+
+    @PUT("$PATH_CONTACT/{id}")
+    suspend fun updateContact(
+        @Path("id") id: String?,
+        @Body contact: Contact,
+    ): Contact
 }

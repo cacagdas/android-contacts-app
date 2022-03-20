@@ -7,4 +7,10 @@ import kotlinx.coroutines.flow.Flow
 interface ContactRepository {
 
     fun getContacts(): Flow<PagingData<Contact>>
+
+    suspend fun getContactDetail(id: String): Contact
+
+    suspend fun deleteContact(id: String): Contact
+
+    suspend fun updateContact(contact: Contact): Contact
 }
