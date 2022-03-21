@@ -85,7 +85,7 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
         }
     }
 
-    override fun provideToolbarTitle() = WidgetToolbar(
+    override fun provideToolbar() = WidgetToolbar(
         title = "Contacts",
         menu = listOf(
             ToolbarMenu(

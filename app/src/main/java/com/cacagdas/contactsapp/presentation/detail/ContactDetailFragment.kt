@@ -35,7 +35,7 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
 
     override fun onBindView(binding: FragmentContactDetailBinding) {
         initTextChangedListeners()
-        binding.update.setOnClickListener { viewModel.onUpdateClicked() }
+        binding.update.setOnClickListener { viewModel.updateContact() }
     }
 
     override fun observeViewModel() {
@@ -80,13 +80,13 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
         }
     }
 
-    override fun provideToolbarTitle() = WidgetToolbar(
+    override fun provideToolbar() = WidgetToolbar(
         title = "Contact Detail",
         menu = listOf(
             ToolbarMenu(
                 title = "Delete"
             ) {
-                // TODO delete contact
+                viewModel.deleteContact()
             }
         ),
     )

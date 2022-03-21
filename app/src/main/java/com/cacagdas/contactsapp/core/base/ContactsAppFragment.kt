@@ -31,7 +31,7 @@ abstract class ContactsAppFragment<Binding : ViewBinding, VM : ContactsAppViewMo
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).updateToolbar(provideToolbarTitle())
+        (activity as MainActivity).updateToolbar(provideToolbar())
     }
 
     override fun onDestroyView() {
@@ -43,7 +43,7 @@ abstract class ContactsAppFragment<Binding : ViewBinding, VM : ContactsAppViewMo
 
     abstract fun observeViewModel()
 
-    abstract fun provideToolbarTitle(): WidgetToolbar
+    abstract fun provideToolbar(): WidgetToolbar
 
     abstract fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> Binding
 }

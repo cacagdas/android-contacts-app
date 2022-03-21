@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.cacagdas.contactsapp.core.base.ContactsAppViewModel
 import com.cacagdas.contactsapp.core.util.extension.checkResult
 import com.cacagdas.contactsapp.data.model.Contact
+import com.cacagdas.contactsapp.domain.DeleteContact
 import com.cacagdas.contactsapp.domain.GetContactDetail
 import com.cacagdas.contactsapp.domain.UpdateContact
 import com.cacagdas.contactsapp.presentation.detail.ContactDetailFragment.Companion.ARG_CONTACT_ID
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class ContactDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getContactDetail: GetContactDetail,
-    private val updateContact: UpdateContact
+    private val updateContact: UpdateContact,
+    private val deleteContact: DeleteContact
 ) : ContactsAppViewModel() {
 
     private val contactDetail = MutableLiveData<Contact>()
@@ -29,12 +31,34 @@ class ContactDetailViewModel @Inject constructor(
     private val contactId = savedStateHandle.get<String>(ARG_CONTACT_ID) as String
 
     init {
+        getContact()
+    }
+
+    private fun getContact() {
         showLoading.value = true
         viewModelLaunch {
             checkResult(getContactDetail.invoke(GetContactDetail.Params(contactId))) {
                 contactDetail.value = it
                 showLoading.value = false
             }
+        }
+    }
+
+    fun updateContact() = viewModelLaunch {
+        contactDetail.value?.let {
+            showLoading.value = true
+            checkResult(updateContact.invoke(UpdateContact.Params(it))) {
+                contactUpdated.value = Unit
+                showLoading.value = false
+            }
+        }
+    }
+
+    fun deleteContact() = viewModelLaunch {
+        showLoading.value = true
+        checkResult(deleteContact.invoke(DeleteContact.Params(contactId))) {
+            contactUpdated.value = Unit
+            showLoading.value = false
         }
     }
 
@@ -61,15 +85,4 @@ class ContactDetailViewModel @Inject constructor(
     fun setEmail(text: Editable?) {
         contactDetail.value?.email = text.toString()
     }
-
-    fun onUpdateClicked() = viewModelLaunch {
-        contactDetail.value?.let {
-            showLoading.value = true
-            checkResult(updateContact.invoke(UpdateContact.Params(it))) {
-                contactUpdated.value = Unit
-                showLoading.value = false
-            }
-        }
-    }
-
 }
