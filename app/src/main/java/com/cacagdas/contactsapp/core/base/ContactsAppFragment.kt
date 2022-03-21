@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.cacagdas.contactsapp.MainActivity
+import com.cacagdas.contactsapp.core.widget.WidgetToolbar
 
 abstract class ContactsAppFragment<Binding : ViewBinding, VM : ContactsAppViewModel> : Fragment() {
 
@@ -27,6 +29,11 @@ abstract class ContactsAppFragment<Binding : ViewBinding, VM : ContactsAppViewMo
         return viewBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).updateToolbar(provideToolbarTitle())
+    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
@@ -35,6 +42,8 @@ abstract class ContactsAppFragment<Binding : ViewBinding, VM : ContactsAppViewMo
     abstract fun onBindView(binding: Binding)
 
     abstract fun observeViewModel()
+
+    abstract fun provideToolbarTitle(): WidgetToolbar
 
     abstract fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> Binding
 }

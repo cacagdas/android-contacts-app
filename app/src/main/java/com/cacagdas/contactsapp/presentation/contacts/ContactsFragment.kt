@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeFlow
 import com.cacagdas.contactsapp.core.util.extension.observeLiveData
+import com.cacagdas.contactsapp.core.widget.ToolbarMenu
 import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
+import com.cacagdas.contactsapp.core.widget.WidgetToolbar
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.databinding.FragmentContactsBinding
 import com.cacagdas.contactsapp.presentation.detail.ContactDetailFragment
@@ -73,11 +75,26 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
         }
     }
 
+    private fun onAddNewContactClicked() {
+        // TODO navigate add new contact
+    }
+
     override fun onContactClick(contact: Contact) {
         contact.id?.let {
             findNavController().navigate(ContactsFragmentDirections.actionContactsFragmentToContactDetailFragment(it))
         }
     }
+
+    override fun provideToolbarTitle() = WidgetToolbar(
+        title = "Contacts",
+        menu = listOf(
+            ToolbarMenu(
+                title = "Add New"
+            ) {
+                onAddNewContactClicked()
+            }
+        ),
+    )
 
     override fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> FragmentContactsBinding {
         return FragmentContactsBinding::inflate

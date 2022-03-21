@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeLiveData
+import com.cacagdas.contactsapp.core.widget.ToolbarMenu
 import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
+import com.cacagdas.contactsapp.core.widget.WidgetToolbar
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.databinding.FragmentContactDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,8 +80,18 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
         }
     }
 
+    override fun provideToolbarTitle() = WidgetToolbar(
+        title = "Contact Detail",
+        menu = listOf(
+            ToolbarMenu(
+                title = "Delete"
+            ) {
+                // TODO delete contact
+            }
+        ),
+    )
+
     override fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> FragmentContactDetailBinding {
         return FragmentContactDetailBinding::inflate
     }
-
 }
