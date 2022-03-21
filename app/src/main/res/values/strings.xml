@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ContactsApp</string>
+
+    <string name="contact_name">Name</string>
+    <string name="contact_surname">Surname</string>
+    <string name="contact_number">Number</string>
+    <string name="contact_company">Company</string>
+    <string name="contact_department">Department</string>
+    <string name="contact_email">Email</string>
+    <string name="update_contact">Update</string>
 </resources>

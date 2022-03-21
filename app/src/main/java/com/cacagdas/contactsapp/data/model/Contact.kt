@@ -7,10 +7,10 @@ import com.squareup.moshi.JsonClass
 data class Contact(
     @Json(name = "id") val id: String?,
     @Json(name = "createdAt") val createdAt: String?,
-    @Json(name = "name") val name: String?,
-    @Json(name = "surname") val surname: String?,
-    @Json(name = "number") val number: Long?,
-    @Json(name = "department") val department: String?,
-    @Json(name = "company_name") val companyName: String?,
-    @Json(name = "email") val email: String?,
+    @Json(name = "name") var name: String?,
+    @Json(name = "surname") var surname: String?,
+    @Json(name = "number") var number: Long?,
+    @Json(name = "department") var department: String?,
+    @Json(name = "company_name") var companyName: String?,
+    @Json(name = "email") var email: String?,
 )

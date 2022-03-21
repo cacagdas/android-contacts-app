@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/contactsFragment"
         android:name="com.cacagdas.contactsapp.presentation.contacts.ContactsFragment"
-        android:label="ContactsFragment" >
+        android:label="Contacts" >
         <action
             android:id="@+id/action_contactsFragment_to_contactDetailFragment"
             app:destination="@id/contactDetailFragment" />
@@ -15,7 +15,7 @@
     <fragment
         android:id="@+id/contactDetailFragment"
         android:name="com.cacagdas.contactsapp.presentation.detail.ContactDetailFragment"
-        android:label="ContactDetailFragment" >
+        android:label="Contact Detail" >
         <argument
             android:name="contactId"
             app:argType="string" />
