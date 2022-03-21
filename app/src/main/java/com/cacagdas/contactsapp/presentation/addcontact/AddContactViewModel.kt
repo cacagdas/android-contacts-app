@@ -23,6 +23,8 @@ class AddContactViewModel @Inject constructor(
     private val routeBack = MutableLiveData<Unit>()
     val routeBackLiveData: LiveData<Unit> = routeBack
 
+    private val API_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
     private var anyChangesMade: Boolean = false
     
     private var contactName: String? = null
@@ -52,7 +54,7 @@ class AddContactViewModel @Inject constructor(
     }
 
     private fun getCurrentTime(): String? {
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat(API_DATE_PATTERN, Locale.getDefault())
         return runCatching {
             simpleDateFormat.format(Calendar.getInstance().time)
         }.getOrNull()

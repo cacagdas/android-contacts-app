@@ -4,14 +4,26 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/search_by_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:hint="@string/search_by_name"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:maxLines="1"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <com.cacagdas.contactsapp.core.widget.WidgetRecyclerView
         android:id="@+id/contacts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:clipToPadding = "false"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_by_name"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

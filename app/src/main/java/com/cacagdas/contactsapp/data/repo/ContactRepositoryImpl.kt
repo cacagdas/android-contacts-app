@@ -2,6 +2,7 @@ package com.cacagdas.contactsapp.data.repo
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.data.source.ContactRemoteDataSource
 import com.cacagdas.contactsapp.data.source.paging.ContactsPagingSource
@@ -11,11 +12,11 @@ class ContactRepositoryImpl @Inject constructor(
     private val remoteDataSource: ContactRemoteDataSource
 ): ContactRepository {
 
-    override fun getContacts() = Pager(
+    override fun getContacts(name: String?) = Pager(
         PagingConfig(pageSize = 20)
     ) {
-        ContactsPagingSource(remoteDataSource)
-    }.flow
+        ContactsPagingSource(remoteDataSource, name)
+    }.liveData
 
     override suspend fun getContactDetail(id: String) = remoteDataSource.getContactDetail(id)
 

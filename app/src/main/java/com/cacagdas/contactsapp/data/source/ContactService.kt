@@ -12,6 +12,7 @@ interface ContactService {
     @GET(PATH_CONTACT)
     suspend fun getContacts(
         @Query("page") page: Long?,
+        @Query("name") name: String?,
         @Query("limit") limit: Int? = 20,
     ): List<Contact>?
 

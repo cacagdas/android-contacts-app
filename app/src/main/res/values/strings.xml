@@ -15,4 +15,5 @@
     <string name="contact_email">Email</string>
     <string name="update_contact">Update</string>
     <string name="add_contact">Add Contact</string>
+    <string name="search_by_name">Search by name</string>
 </resources>

@@ -3,13 +3,13 @@ package com.cacagdas.contactsapp.presentation.contacts
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.cacagdas.contactsapp.R
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeFlow
@@ -19,8 +19,8 @@ import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
 import com.cacagdas.contactsapp.core.widget.WidgetToolbar
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.databinding.FragmentContactsBinding
-import com.cacagdas.contactsapp.presentation.detail.ContactDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsViewModel>(), ContactItemEventHandler {
@@ -43,13 +43,14 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
         super.onCreate(savedInstanceState)
         setFragmentResultListener(RESULT_KEY_CONTACT_EDIT_LISTENER) { _, bundle ->
             if (bundle.getBoolean(RESULT_ARG_CONTACT_UPDATED))
-                viewModel.getContacts()
+                binding.searchByName.text?.clear()
         }
     }
 
     override fun onBindView(binding: FragmentContactsBinding) {
         initRecyclerView()
         initAdapter()
+        binding.searchByName.doAfterTextChanged { viewModel.searchByName(it.toString()) }
     }
 
     override fun observeViewModel() {
@@ -57,8 +58,10 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
             observeLiveData(showLoadingLiveData) {
                 progressDialog.showOrHide(it)
             }
-            observeFlow(contactsFlow) {
-                contactsAdapter.submitData(it)
+            observeLiveData(contacts) {
+                lifecycleScope.launch {
+                    contactsAdapter.submitData(it)
+                }
             }
         }
     }

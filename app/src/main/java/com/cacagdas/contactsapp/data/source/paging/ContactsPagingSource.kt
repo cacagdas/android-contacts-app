@@ -6,7 +6,8 @@ import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.data.source.ContactRemoteDataSource
 
 class ContactsPagingSource(
-    private val remoteDataSource: ContactRemoteDataSource
+    private val remoteDataSource: ContactRemoteDataSource,
+    private val name: String?
 ): PagingSource<Long, Contact>() {
     override fun getRefreshKey(state: PagingState<Long, Contact>): Long? = null
 
@@ -26,5 +27,5 @@ class ContactsPagingSource(
     }
 
     private suspend fun getResponse(page: Long?): List<Contact>? =
-        remoteDataSource.getContacts(page)
+        remoteDataSource.getContacts(page, name)
 }
