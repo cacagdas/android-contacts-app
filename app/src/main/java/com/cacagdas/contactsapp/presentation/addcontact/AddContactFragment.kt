@@ -1,4 +1,4 @@
-package com.cacagdas.contactsapp.presentation.detail
+package com.cacagdas.contactsapp.presentation.addcontact
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,16 @@ import androidx.navigation.fragment.findNavController
 import com.cacagdas.contactsapp.R
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeLiveData
-import com.cacagdas.contactsapp.core.widget.ToolbarMenu
 import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
 import com.cacagdas.contactsapp.core.widget.WidgetToolbar
-import com.cacagdas.contactsapp.data.model.Contact
-import com.cacagdas.contactsapp.databinding.FragmentContactDetailBinding
+import com.cacagdas.contactsapp.databinding.FragmentAddContactBinding
 import com.cacagdas.contactsapp.presentation.contacts.ContactsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, ContactDetailViewModel>() {
+class AddContactFragment : ContactsAppFragment<FragmentAddContactBinding, AddContactViewModel>() {
 
-    override val viewModel: ContactDetailViewModel by viewModels()
+    override val viewModel: AddContactViewModel by viewModels()
 
     private val progressDialog by lazy {
         WidgetProgressDialog(requireContext()).also {
@@ -29,12 +27,9 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
         }
     }
 
-    companion object {
-        const val ARG_CONTACT_ID = "contactId"
-    }
-
-    override fun onBindView(binding: FragmentContactDetailBinding) {
-        binding.update.setOnClickListener { viewModel.onUpdateContactClicked() }
+    override fun onBindView(binding: FragmentAddContactBinding) {
+        initTextChangedListeners()
+        binding.add.setOnClickListener { viewModel.onAddContactClicked() }
     }
 
     override fun observeViewModel() {
@@ -42,13 +37,10 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
             observeLiveData(showLoadingLiveData) {
                 progressDialog.showOrHide(it)
             }
-            observeLiveData(contactDetailLiveData) {
-                bindContact(it)
-            }
             observeLiveData(routeBackLiveData) {
                 routeBack()
             }
-            observeLiveData(contactUpdatedLiveData) {
+            observeLiveData(contactAddedLiveData) {
                 setFragmentResult(
                     ContactsFragment.RESULT_KEY_CONTACT_EDIT_LISTENER,
                     Bundle().apply {
@@ -58,18 +50,6 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
                 routeBack()
             }
         }
-    }
-
-    private fun bindContact(contact: Contact) {
-        binding.run {
-            name.setText(contact.name)
-            surname.setText(contact.surname)
-            number.setText(contact.number.toString())
-            company.setText(contact.companyName)
-            department.setText(contact.department)
-            email.setText(contact.email)
-        }
-        initTextChangedListeners()
     }
 
     private fun initTextChangedListeners() {
@@ -88,17 +68,10 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
     }
 
     override fun provideToolbar() = WidgetToolbar(
-        title = getString(R.string.contact_detail_title),
-        menu = listOf(
-            ToolbarMenu(
-                title = getString(R.string.menu_delete)
-            ) {
-                viewModel.deleteContact()
-            }
-        ),
+        title = getString(R.string.add_contact_title),
     )
 
-    override fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> FragmentContactDetailBinding {
-        return FragmentContactDetailBinding::inflate
+    override fun provideBindingInflater(): (LayoutInflater, ViewGroup?, Boolean) -> FragmentAddContactBinding {
+        return FragmentAddContactBinding::inflate
     }
 }

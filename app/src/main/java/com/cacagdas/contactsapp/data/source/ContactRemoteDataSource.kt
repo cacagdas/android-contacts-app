@@ -13,4 +13,6 @@ class ContactRemoteDataSource @Inject constructor(
     suspend fun deleteContact(id: String) = service.deleteContact(id)
 
     suspend fun updateContact(contact: Contact) = service.updateContact(contact.id, contact)
+
+    suspend fun addContact(contact: Contact) = service.addContact(contact)
 }

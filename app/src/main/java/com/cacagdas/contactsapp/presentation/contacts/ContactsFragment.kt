@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cacagdas.contactsapp.R
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeFlow
 import com.cacagdas.contactsapp.core.util.extension.observeLiveData
@@ -33,10 +34,15 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
 
     private lateinit var contactsAdapter: ContactListAdapter
 
+    companion object {
+        const val RESULT_KEY_CONTACT_EDIT_LISTENER = "contact_edit_listener"
+        const val RESULT_ARG_CONTACT_UPDATED = "contact_updated"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResultListener(ContactDetailFragment.RESULT_KEY_CONTACT_EDIT_LISTENER) { _, bundle ->
-            if (bundle.getBoolean(ContactDetailFragment.RESULT_ARG_CONTACT_UPDATED))
+        setFragmentResultListener(RESULT_KEY_CONTACT_EDIT_LISTENER) { _, bundle ->
+            if (bundle.getBoolean(RESULT_ARG_CONTACT_UPDATED))
                 viewModel.getContacts()
         }
     }
@@ -76,7 +82,7 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
     }
 
     private fun onAddNewContactClicked() {
-        // TODO navigate add new contact
+        findNavController().navigate(ContactsFragmentDirections.actionContactsFragmentToAddContactFragment())
     }
 
     override fun onContactClick(contact: Contact) {
@@ -86,10 +92,10 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
     }
 
     override fun provideToolbar() = WidgetToolbar(
-        title = "Contacts",
+        title = getString(R.string.contacts_title),
         menu = listOf(
             ToolbarMenu(
-                title = "Add New"
+                title = getString(R.string.menu_add_new)
             ) {
                 onAddNewContactClicked()
             }

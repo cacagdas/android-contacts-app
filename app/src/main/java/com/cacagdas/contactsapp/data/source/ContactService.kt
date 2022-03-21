@@ -30,4 +30,9 @@ interface ContactService {
         @Path("id") id: String?,
         @Body contact: Contact,
     ): Contact
+
+    @POST(PATH_CONTACT)
+    suspend fun addContact(
+        @Body contact: Contact,
+    ): Contact
 }

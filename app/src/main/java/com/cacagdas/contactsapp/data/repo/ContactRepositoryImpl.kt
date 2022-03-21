@@ -22,4 +22,6 @@ class ContactRepositoryImpl @Inject constructor(
     override suspend fun deleteContact(id: String) = remoteDataSource.deleteContact(id)
 
     override suspend fun updateContact(contact: Contact) = remoteDataSource.updateContact(contact)
+
+    override suspend fun addContact(contact: Contact) = remoteDataSource.addContact(contact)
 }
