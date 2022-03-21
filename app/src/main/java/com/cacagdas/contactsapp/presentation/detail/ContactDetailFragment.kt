@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeLiveData
+import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.databinding.FragmentContactDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, ContactDetailViewModel>() {
 
     override val viewModel: ContactDetailViewModel by viewModels()
+
+    private val progressDialog by lazy {
+        WidgetProgressDialog(requireContext()).also {
+            lifecycle.addObserver(it)
+        }
+    }
 
     companion object {
         const val ARG_CONTACT_ID = "contactId"
@@ -31,6 +38,9 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
 
     override fun observeViewModel() {
         viewModel.run {
+            observeLiveData(showLoadingLiveData) {
+                progressDialog.showOrHide(it)
+            }
             observeLiveData(contactDetailLiveData) {
                 bindContact(it)
             }

@@ -3,12 +3,17 @@ package com.cacagdas.contactsapp.presentation.contacts
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cacagdas.contactsapp.core.base.ContactsAppFragment
 import com.cacagdas.contactsapp.core.util.extension.observeFlow
+import com.cacagdas.contactsapp.core.util.extension.observeLiveData
+import com.cacagdas.contactsapp.core.widget.WidgetProgressDialog
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.databinding.FragmentContactsBinding
 import com.cacagdas.contactsapp.presentation.detail.ContactDetailFragment
@@ -17,6 +22,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsViewModel>(), ContactItemEventHandler {
     override val viewModel: ContactsViewModel by viewModels()
+
+    private val progressDialog by lazy {
+        WidgetProgressDialog(requireContext()).also {
+            lifecycle.addObserver(it)
+        }
+    }
+
     private lateinit var contactsAdapter: ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +46,9 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
 
     override fun observeViewModel() {
         viewModel.run {
+            observeLiveData(showLoadingLiveData) {
+                progressDialog.showOrHide(it)
+            }
             observeFlow(contactsFlow) {
                 contactsAdapter.submitData(it)
             }
@@ -49,6 +64,13 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
     private fun initAdapter() {
         contactsAdapter = ContactListAdapter(this)
         binding.contacts.setAdapter(contactsAdapter, this)
+        contactsAdapter.handleLoadState()
+    }
+
+    private fun ContactListAdapter.handleLoadState() {
+        this.addLoadStateListener { loadState ->
+            viewModel.showLoading.value = loadState.refresh is LoadState.Loading
+        }
     }
 
     override fun onContactClick(contact: Contact) {

@@ -29,9 +29,11 @@ class ContactDetailViewModel @Inject constructor(
     private val contactId = savedStateHandle.get<String>(ARG_CONTACT_ID) as String
 
     init {
+        showLoading.value = true
         viewModelLaunch {
             checkResult(getContactDetail.invoke(GetContactDetail.Params(contactId))) {
                 contactDetail.value = it
+                showLoading.value = false
             }
         }
     }
@@ -62,8 +64,10 @@ class ContactDetailViewModel @Inject constructor(
 
     fun onUpdateClicked() = viewModelLaunch {
         contactDetail.value?.let {
+            showLoading.value = true
             checkResult(updateContact.invoke(UpdateContact.Params(it))) {
                 contactUpdated.value = Unit
+                showLoading.value = false
             }
         }
     }
