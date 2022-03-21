@@ -3,7 +3,9 @@ package com.cacagdas.contactsapp.presentation.contacts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.cacagdas.contactsapp.core.base.ContactsAppViewModel
 import com.cacagdas.contactsapp.data.model.Contact
 import com.cacagdas.contactsapp.domain.GetContacts
@@ -18,7 +20,7 @@ class ContactsViewModel @Inject constructor(
     private val query = MutableLiveData<String?>()
     val contacts: LiveData<PagingData<Contact>> = query.switchMap {
         getContacts.invoke(GetContacts.Params(it))
-    }
+    }.cachedIn(viewModelScope)
 
     init {
         getContacts()
@@ -29,7 +31,8 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun searchByName(search: String?) {
-        query.value = search
+        if (search != query.value)
+            query.value = search
     }
 
 }

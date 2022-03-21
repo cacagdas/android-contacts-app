@@ -42,15 +42,20 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setFragmentResultListener(RESULT_KEY_CONTACT_EDIT_LISTENER) { _, bundle ->
-            if (bundle.getBoolean(RESULT_ARG_CONTACT_UPDATED))
+            if (bundle.getBoolean(RESULT_ARG_CONTACT_UPDATED)) {
                 binding.searchByName.text?.clear()
+                viewModel.getContacts()
+            }
         }
     }
 
     override fun onBindView(binding: FragmentContactsBinding) {
         initRecyclerView()
         initAdapter()
-        binding.searchByName.doAfterTextChanged { viewModel.searchByName(it.toString()) }
+        binding.searchByName.doAfterTextChanged {
+            if (it.isNullOrEmpty()) return@doAfterTextChanged
+            viewModel.searchByName(it.toString())
+        }
     }
 
     override fun observeViewModel() {
