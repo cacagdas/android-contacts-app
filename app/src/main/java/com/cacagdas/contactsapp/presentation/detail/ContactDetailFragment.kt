@@ -34,8 +34,7 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
     }
 
     override fun onBindView(binding: FragmentContactDetailBinding) {
-        initTextChangedListeners()
-        binding.update.setOnClickListener { viewModel.updateContact() }
+        binding.update.setOnClickListener { viewModel.onUpdateContactClicked() }
     }
 
     override fun observeViewModel() {
@@ -46,6 +45,9 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
             observeLiveData(contactDetailLiveData) {
                 bindContact(it)
             }
+            observeLiveData(routeBackLiveData) {
+                routeBack()
+            }
             observeLiveData(contactUpdatedLiveData) {
                 setFragmentResult(
                     RESULT_KEY_CONTACT_EDIT_LISTENER,
@@ -53,7 +55,7 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
                         putBoolean(RESULT_ARG_CONTACT_UPDATED, true)
                     }
                 )
-                findNavController().popBackStack()
+                routeBack()
             }
         }
     }
@@ -67,6 +69,7 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
             department.setText(contact.department)
             email.setText(contact.email)
         }
+        initTextChangedListeners()
     }
 
     private fun initTextChangedListeners() {
@@ -78,6 +81,10 @@ class ContactDetailFragment : ContactsAppFragment<FragmentContactDetailBinding, 
             department.doAfterTextChanged { viewModel.setDepartment(it) }
             email.doAfterTextChanged { viewModel.setEmail(it) }
         }
+    }
+
+    private fun routeBack() {
+        findNavController().popBackStack()
     }
 
     override fun provideToolbar() = WidgetToolbar(

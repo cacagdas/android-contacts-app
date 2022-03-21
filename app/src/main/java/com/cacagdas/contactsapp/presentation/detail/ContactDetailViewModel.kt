@@ -28,7 +28,12 @@ class ContactDetailViewModel @Inject constructor(
     private val contactUpdated = MutableLiveData<Unit>()
     val contactUpdatedLiveData: LiveData<Unit> = contactUpdated
 
+    private val routeBack = MutableLiveData<Unit>()
+    val routeBackLiveData: LiveData<Unit> = routeBack
+
     private val contactId = savedStateHandle.get<String>(ARG_CONTACT_ID) as String
+
+    private var anyChangesMade: Boolean = false
 
     init {
         getContact()
@@ -44,7 +49,7 @@ class ContactDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateContact() = viewModelLaunch {
+    private fun updateContact() = viewModelLaunch {
         contactDetail.value?.let {
             showLoading.value = true
             checkResult(updateContact.invoke(UpdateContact.Params(it))) {
@@ -52,6 +57,14 @@ class ContactDetailViewModel @Inject constructor(
                 showLoading.value = false
             }
         }
+    }
+
+    fun onUpdateContactClicked() {
+        if (!anyChangesMade) {
+            routeBack.value = Unit
+            return
+        }
+        updateContact()
     }
 
     fun deleteContact() = viewModelLaunch {
@@ -63,26 +76,32 @@ class ContactDetailViewModel @Inject constructor(
     }
 
     fun setName(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.name = text.toString()
     }
 
     fun setSurname(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.surname = text.toString()
     }
 
     fun setNumber(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.number = text.toString().toLongOrNull()
     }
 
     fun setCompany(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.companyName = text.toString()
     }
 
     fun setDepartment(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.department = text.toString()
     }
 
     fun setEmail(text: Editable?) {
+        anyChangesMade = true
         contactDetail.value?.email = text.toString()
     }
 }
