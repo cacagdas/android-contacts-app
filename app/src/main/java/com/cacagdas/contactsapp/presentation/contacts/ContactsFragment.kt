@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -52,9 +53,9 @@ class ContactsFragment : ContactsAppFragment<FragmentContactsBinding, ContactsVi
     override fun onBindView(binding: FragmentContactsBinding) {
         initRecyclerView()
         initAdapter()
-        binding.searchByName.doAfterTextChanged {
-            if (it.isNullOrEmpty()) return@doAfterTextChanged
-            viewModel.searchByName(it.toString())
+        binding.searchByName.doOnTextChanged { text, _, before, _ ->
+            if (text?.trim().isNullOrEmpty() && before == 0) return@doOnTextChanged
+            viewModel.searchByName(text?.trim().toString())
         }
     }
 
